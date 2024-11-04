@@ -332,7 +332,13 @@ routes.post('/xp', async (req, res) => {
 
     if (existingProgress) {
       questionId = existingProgress.question_id;
+    } else {
+      questionId = 0;
     }
+
+    console.log(user_id);
+    console.log(existingProgress);
+    console.log(questionId);
 
     return res.status(201).json({ userXp, userLevel, questionId });
 
@@ -362,17 +368,6 @@ routes.post('/register-xp', async (req, res) => {
       userLevel = existingUser.level;
     }
 
-    // Verifica se o XP do usuário não chegou ao máximo
-    if ((userXp + xp_reward) >= 100 && userLevel == 3) {
-
-      await db('users_login').where('id', '=', user_id).update({
-        xp: 100,
-        level: 3,
-      });
-
-      return res.status(201).json({ message: 'Máximo XP alcançado' });
-    }
-
     // Calcula o XP total do usuário, desconsiderando o nivel atual ou a 'sobra'
     let xpTotal = userXp + xp_reward;
 
@@ -396,6 +391,11 @@ routes.post('/register-xp', async (req, res) => {
     //   newXp = userXp + xp_reward;
     //   newUserLevel = userLevel;
     // }
+
+    if(newUserLevel > 3)
+    {
+      newUserLevel = 3;
+    }
 
     // Insere a tentativa 
     await db('user_progress').insert({

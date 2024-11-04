@@ -8,7 +8,7 @@ export async function up(knex: Knex): Promise<void> {
     table.date('birthdate').notNullable();  // Data de nascimento
     table.string('pass').notNullable();  // Senha
     table.integer('xp').defaultTo(0);  // Xp
-    table.string('level').defaultTo('iniciante');  // Xp
+    table.integer('level').defaultTo(1);  // Xp
   });
 }
 
